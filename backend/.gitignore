@@ -1,0 +1,52 @@
+# Django specific
+*.log
+*.pot
+*.pyc
+__pycache__/
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+
+# Python
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+bin/
+var/
+sdist/
+pip-wheel-metadata/
+*.manifest
+*.spec
+
+# Virtualenv
+venv/
+env/
+ENV/
+.venv/
+.ENV/
+venv.bak/
+env.bak/
+
+# Pytest
+.cache/
+
+# Editor-specific
+.vscode/
+.idea/
+*.swp
+*~
+*.sublime-project
+*.sublime-workspace
+
+# OS-specific
+.DS_Store
+Thumbs.db
+desktop.ini
