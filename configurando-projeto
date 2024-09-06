@@ -1,0 +1,35 @@
+BACKEND
+==================================================
+python -m venv venv # Cria um ambiente virtual
+
+Set-ExecutionPolicy RemoteSigned # Permite que você possa dar o comando para habilitar o ambiente virtual
+
+./venv/Scripts/activate # Ativa o ambiente virtual
+
+pip install django djangorestframework django-cors-headers # Instalando as bibliotecas necessárias para o backend
+
+django-admin startproject [nomeDoProjeto] . # Cria o projeto django
+
+Configurações no arquivo "settings.py"
+    - Add aos INSTALLED_APPS: rest_framework, corsheaders.
+    - Add ao MIDDLEWARE: corsheaders.middleware.CorsMiddleware.
+    - Em DIRS, setar: [BASE_DIR / 'build']
+    - Depois de STATIC_URL, add a linha: STATICFILES_DIRS = [BASE_DIR / 'build/static']
+    - Depois da linha criada acima, add a linha: STATIC_ROOT = BASE_DIR / 'static'
+    - Depois da linha criada acima, add a linha: CORS_ORIGIN_ALLOW_ALL = True
+
+Configurações no arquivo "urls.py"
+    - Na linha "from django.urls import path", modifique para: from django.urls import path, include, re_path
+    - Depois da linha citada acima, add a linha: from django.views.generic import TemplateView
+    - Na lista "urlpatterns", add a path: path('api-auth/', include('rest_framework.urls'))
+    - Na linha seguinte, add a seguinte linha: urlpatterns += [re_path(r'^.*', TemplateView.as_view(template_name='index.html'))]
+
+FRONTEND
+==================================================
+npx create-react-app frontend # Cria o projeto react para o frontend # Cria um projeto react para o frotend
+
+Configurações no arquivo "package.json"
+    - Nos "scripts", no "build", faça: "build": "rm -rf ../backend/build && react-scripts build && cp -r build ../backend/build && rm -rf build",
+
+npm run build # Builda o projeto react
+npm run start # Starta o projeto react
