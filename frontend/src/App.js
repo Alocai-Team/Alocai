@@ -14,6 +14,8 @@ import Registro from './pages/Registro/Registro';
 import Alocar from './pages/alocar/Alocar';
 import Calendario from './pages/calendario/Calendario';
 import Configuracoes from './pages/configuracoes/Configuracoes';
+import SolicitacoesUser from './pages/solicitacoesUser/SolicitacoesUser';
+import SolicitacoesAdm from './pages/solicitacoesAdm/SolicitacoesAdm';
 
 
 
@@ -50,6 +52,8 @@ function App() {
         <Route path='alocar' element={<Alocar/>} />
         <Route path='calendario' element={<Calendario/>} />
         <Route path='configuracoes' element={<Configuracoes/>} />
+        <Route path='solicitacoesUser' element={<SolicitacoesUser/>} />
+        <Route path='solicitacoesAdm' element={<SolicitacoesAdm/>} />
         
        
         
