@@ -13,6 +13,7 @@ import MenuCadastro from './pages/menuCadastro/MenuCadastro';
 import Registro from './pages/Registro/Registro';
 import Alocar from './pages/alocar/Alocar';
 import Calendario from './pages/calendario/Calendario';
+import Configuracoes from './pages/configuracoes/Configuracoes';
 
 
 
@@ -48,6 +49,8 @@ function App() {
         <Route path='registro' element={<Registro/>} />
         <Route path='alocar' element={<Alocar/>} />
         <Route path='calendario' element={<Calendario/>} />
+        <Route path='configuracoes' element={<Configuracoes/>} />
+        
        
         
 
