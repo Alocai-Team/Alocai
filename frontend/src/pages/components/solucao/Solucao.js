@@ -1,7 +1,6 @@
 import { TbAsterisk } from 'react-icons/tb'
 import geometricForm from '../../../assets/geometricForm.png'
 import womanSite from '../../../assets/womanSite.png'
-import womanSite from 
 import './Solucao.css'
 
 

@@ -1,0 +1,29 @@
+.headerContainer{
+    width: 100vw;
+    display: flex;
+    justify-content: space-around;
+}
+.linkContainer{
+    height: 80%;
+    background-color: #008DD8;
+    border-radius: 0px 20px 0px 20px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.linkContainer > .linkLogado{
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    padding: 1.5rem;
+    border: none;
+    display: flex;
+    align-items: center;
+    
+}
+.iconNavBarLogado{
+    font-size: 2rem;
+    margin-right: 10px;
+}

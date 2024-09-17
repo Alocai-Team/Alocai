@@ -1,4 +1,4 @@
-import manSite from '../../../assets/mansite.png'
+import manSite from '../../../assets/manSite.png'
 import './Welcome.css'
 
 
