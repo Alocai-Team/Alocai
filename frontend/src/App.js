@@ -1,9 +1,13 @@
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 
-import Site from './pages/site/Site';
+
 import NavBarSite from './pages/components/navBar/NavBarSite';
 import NavBarAdm from './pages/components/navBar/NavBarAdm';
 import NavBarUser from './pages/components/navBar/NavBarUser';
+import Site from './pages/site/Site';
+import Login from './pages/login/Login';
+import CadastroSala from './pages/cadastroSalas/CadastroSala';
+import CadastroPredio from './pages/cadastroPredio/CadastroPredio';
 
 
 function App() {
@@ -30,6 +34,9 @@ function App() {
       {getNavBar()}  {/* Aqui chamamos a função para renderizar a NavBar correta */}
       <Routes>
         <Route path='/' element={<Site />} />
+        <Route path='login' element={<Login />} />
+        <Route path='cadastroSala' element={<CadastroSala />} />
+        <Route path='cadastroPredio' element={<CadastroPredio />} />
         {isLoggedIn && (
           <>
             {isAdmin && (
