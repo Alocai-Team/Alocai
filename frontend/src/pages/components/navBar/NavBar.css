@@ -1,0 +1,42 @@
+.header {
+    width: 100%;
+    max-width: 1280px;
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.logo {
+    width: 8rem;
+    padding: 0.5rem;
+}
+
+.buttonsCenter {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.buttonsRight {
+    justify-content: flex-end;
+    display: flex;
+    gap: 1rem;
+}
+
+.linkButton, .commonButton {
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 14px;
+    color: black;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.commonButton {
+    color: white;
+    background-color: #008DD8;
+    border-radius: 12px;
+}
