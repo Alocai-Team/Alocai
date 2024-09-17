@@ -10,6 +10,7 @@ import CadastroSala from './pages/cadastroSalas/CadastroSala';
 import CadastroPredio from './pages/cadastroPredio/CadastroPredio';
 import CadastroDepartamento from './pages/cadastroDepartamento/CadastroDepartamento';
 import MenuCadastro from './pages/menuCadastro/MenuCadastro';
+import Registro from './pages/Registro/Registro';
 
 
 function App() {
@@ -41,6 +42,8 @@ function App() {
         <Route path='cadastroPredio' element={<CadastroPredio />} />
         <Route path='cadastroDepartamento' element={<CadastroDepartamento />} />
         <Route path='menuCadastro' element={<MenuCadastro/>} />
+        <Route path='registro' element={<Registro/>} />
+
         {isLoggedIn && (
           <>
             {isAdmin && (
