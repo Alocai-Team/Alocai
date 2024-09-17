@@ -1,0 +1,86 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.filters-wrapper {
+    width: 80%;
+    margin-bottom: 20px;
+}
+
+.filters {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.filter-label {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+}
+
+.filter-select {
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    outline: none;
+    height: 2rem;
+    width: 100%;
+    border-radius: 5px;
+    border: 2px solid lightgray;
+}
+
+.search-button {
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.table-wrapper {
+    width: 80%;
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.agenda-shadow {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    transition: box-shadow 0.3s ease;
+}
+
+.agenda-shadow:hover {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+}
+
+.table thead th {
+    background-color: #007BFF;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    border: 2px solid #007BFF;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.table tbody td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    background-color: #F0F0F0;
+    border-radius: 5px;
+}
+
+.table tbody .time-cell {
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
