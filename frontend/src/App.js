@@ -8,6 +8,8 @@ import Site from './pages/site/Site';
 import Login from './pages/login/Login';
 import CadastroSala from './pages/cadastroSalas/CadastroSala';
 import CadastroPredio from './pages/cadastroPredio/CadastroPredio';
+import CadastroDepartamento from './pages/cadastroDepartamento/CadastroDepartamento';
+import MenuCadastro from './pages/menuCadastro/MenuCadastro';
 
 
 function App() {
@@ -37,6 +39,8 @@ function App() {
         <Route path='login' element={<Login />} />
         <Route path='cadastroSala' element={<CadastroSala />} />
         <Route path='cadastroPredio' element={<CadastroPredio />} />
+        <Route path='cadastroDepartamento' element={<CadastroDepartamento />} />
+        <Route path='menuCadastro' element={<MenuCadastro/>} />
         {isLoggedIn && (
           <>
             {isAdmin && (
