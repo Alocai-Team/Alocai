@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from salas.models import Sala
 from django.contrib.auth.models import User
 
@@ -9,7 +10,7 @@ STATUS_CHOICES = (
 )
 
 class Agendamento(models.Model):
-    id_usuario = models.ForeignKey(User, on_delete=models.PROTECT, related_name='agendamento')
+    id_usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name='agendamento')
     id_sala = models.ForeignKey(Sala, on_delete=models.PROTECT, related_name='agendamento')
     data_inicio = models.DateField()
     data_fim = models.DateField()
