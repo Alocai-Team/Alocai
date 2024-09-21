@@ -1,124 +1,102 @@
 import { useState, useEffect } from 'react';
 import '../../styles/Calendario.css';
 
-
 const Calendario = () => {
   const [departments, setDepartments] = useState([]);
   const [buildings, setBuildings] = useState([]);
   const [rooms, setRooms] = useState([]);
   const [turns] = useState(['Manhã', 'Tarde', 'Noite']);
-  
-  const [selectedDepartment, setSelectedDepartment] = useState(3); // Departamento de Computação por default
-  const [selectedBuilding, setSelectedBuilding] = useState(3); // Prédio Ceagri 1 por default
-  const [selectedRoom, setSelectedRoom] = useState(1); // Sala 101 por default
-  const [selectedTurn, setSelectedTurn] = useState('');
   const [scheduleData, setScheduleData] = useState([]);
-  const [scheduleTimes, setScheduleTimes] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  
+  const [selectedDepartment, setSelectedDepartment] = useState('');
+  const [selectedBuilding, setSelectedBuilding] = useState('');
+  const [selectedRoom, setSelectedRoom] = useState('');
+  const [selectedTurn, setSelectedTurn] = useState('');
+  const [selectedMonth, setSelectedMonth] = useState('');
+  const [selectedYear, setSelectedYear] = useState('');
+  const [selectedWeek, setSelectedWeek] = useState('');
 
   useEffect(() => {
-    setDepartments([
-      { id: 1, name: 'Departamento de Matemática' },
-      { id: 2, name: 'Departamento de Física' },
-      { id: 3, name: 'Departamento de Computação' }
-    ]);
-    setBuildings([
-      { id: 1, name: 'Prédio A' },
-      { id: 2, name: 'Prédio B' },
-      { id: 3, name: 'Ceagri 1' }
-    ]);
-    setRooms([
-      { id: 1, name: 'Sala 101' },
-      { id: 2, name: 'Sala 102' },
-      { id: 3, name: 'Sala 103' }
-    ]);
+    // Fetching data from API
+    fetch('http://localhost:8000/agendamentos/')
+      .then(response => response.json())
+      .then(data => {
+        setScheduleData(data);
+        setFilteredData(data);
+      })
+      .catch(error => console.error('Error fetching data:', error));
+  }, []);
 
-    const turnTimes = {
-      'Manhã': [
-        '07:00 - 08:00',
-        '08:00 - 09:00',
-        '09:00 - 10:00',
-        '10:00 - 11:00',
-        '11:00 - 12:00',
-        '12:00 - 13:00'
-      ],
-      'Tarde': [
-        '14:00 - 15:00',
-        '15:00 - 16:00',
-        '16:00 - 17:00',
-        '17:00 - 18:00'
-      ],
-      'Noite': [
-        '18:00 - 19:00',
-        '19:00 - 20:00',
-        '20:00 - 21:00',
-        '21:00 - 22:00'
-      ]
-    };
+  useEffect(() => {
+    let filtered = scheduleData;
 
-    // Exemplo de agenda com nome e uso da sala
-    const exampleSchedules = {
-      'Sala 101': {
-        'Manhã': [
-          { time: '07:00 - 08:00', mon: 'João - Reunião', tue: 'Maria - Aula', wed: 'Pedro - Pesquisa', thu: '', fri: 'Ana - Aula' },
-          { time: '08:00 - 09:00', mon: 'Marcos - Reunião', tue: '', wed: 'Beatriz - Aula', thu: '', fri: '' }
-        ],
-        'Tarde': [
-          { time: '14:00 - 15:00', mon: 'Lucas - Treinamento', tue: '', wed: 'Carla - Aula', thu: '', fri: 'Fernanda - Reunião' }
-        ],
-        'Noite': [
-          { time: '18:00 - 19:00', mon: 'Renato - Aula', tue: '', wed: '', thu: 'Juliana - Reunião', fri: '' }
-        ]
-      },
-      'Sala 102': {
-        'Manhã': [
-          { time: '07:00 - 08:00', mon: 'Paulo - Pesquisa', tue: '', wed: 'Matheus - Reunião', thu: 'Lucas - Aula', fri: '' },
-          { time: '08:00 - 09:00', mon: '', tue: 'Bianca - Treinamento', wed: '', thu: 'Carlos - Reunião', fri: '' }
-        ],
-        'Tarde': [
-          { time: '14:00 - 15:00', mon: '', tue: 'Débora - Aula', wed: '', thu: '', fri: 'Clara - Pesquisa' }
-        ],
-        'Noite': [
-          { time: '18:00 - 19:00', mon: '', tue: '', wed: 'Rafael - Aula', thu: '', fri: 'Fernanda - Reunião' }
-        ]
-      },
-      'Sala 103': {
-        'Manhã': [
-          { time: '07:00 - 08:00', mon: 'Ricardo - Reunião', tue: 'Camila - Pesquisa', wed: '', thu: '', fri: 'Carlos - Aula' },
-          { time: '08:00 - 09:00', mon: 'Sofia - Treinamento', tue: '', wed: 'Renato - Aula', thu: '', fri: '' }
-        ],
-        'Tarde': [
-          { time: '14:00 - 15:00', mon: 'Juliana - Pesquisa', tue: '', wed: 'Ana - Reunião', thu: '', fri: '' }
-        ],
-        'Noite': [
-          { time: '18:00 - 19:00', mon: '', tue: 'Fábio - Aula', wed: '', thu: 'Roberta - Treinamento', fri: '' }
-        ]
-      }
-    };
-
-    if (selectedTurn && selectedRoom) {
-      const selectedRoomName = rooms.find(room => room.id == selectedRoom)?.name || 'Sala 101';
-      setScheduleTimes(turnTimes[selectedTurn]);
-      setScheduleData(exampleSchedules[selectedRoomName][selectedTurn] || []);
+    // Filtering by department
+    if (selectedDepartment) {
+      filtered = filtered.filter(item => item.id_usuario.department === selectedDepartment);
     }
-  }, [selectedTurn, selectedRoom]);
+
+    // Filtering by building
+    if (selectedBuilding) {
+      filtered = filtered.filter(item => item.id_sala.building === selectedBuilding);
+    }
+
+    // Filtering by room
+    if (selectedRoom) {
+      filtered = filtered.filter(item => item.id_sala.id === selectedRoom);
+    }
+
+    // Filtering by turn
+    if (selectedTurn) {
+      filtered = filtered.filter(item => {
+        const hour = new Date(item.hora_inicio).getHours();
+        if (selectedTurn === 'Manhã') return hour >= 7 && hour < 12;
+        if (selectedTurn === 'Tarde') return hour >= 14 && hour < 18;
+        if (selectedTurn === 'Noite') return hour >= 18 && hour < 22;
+        return false;
+      });
+    }
+
+    // Filtering by month and year
+    if (selectedMonth && selectedYear) {
+      filtered = filtered.filter(item => {
+        const date = new Date(item.data_inicio);
+        return date.getMonth() + 1 === parseInt(selectedMonth) && date.getFullYear() === parseInt(selectedYear);
+      });
+    }
+
+    // Filtering by week
+    if (selectedWeek) {
+      filtered = filtered.filter(item => {
+        const date = new Date(item.data_inicio);
+        const weekNumber = getWeek(date);
+        return weekNumber === parseInt(selectedWeek);
+      });
+    }
+
+    setFilteredData(filtered);
+  }, [selectedDepartment, selectedBuilding, selectedRoom, selectedTurn, selectedMonth, selectedYear, selectedWeek, scheduleData]);
+
+  // Helper function to calculate the week number
+  const getWeek = (date) => {
+    const start = new Date(date.getFullYear(), 0, 1);
+    const diff = (date - start + ((start.getDay() + 1) * 86400000)) / 86400000;
+    return Math.ceil(diff / 7);
+  };
 
   const columns = [
-    { title: 'Horário', dataIndex: 'time', key: 'time' },
-    { title: 'Segunda-feira', dataIndex: 'mon', key: 'mon' },
-    { title: 'Terça-feira', dataIndex: 'tue', key: 'tue' },
-    { title: 'Quarta-feira', dataIndex: 'wed', key: 'wed' },
-    { title: 'Quinta-feira', dataIndex: 'thu', key: 'thu' },
-    { title: 'Sexta-feira', dataIndex: 'fri', key: 'fri' }
+    { title: 'Horário', dataIndex: 'hora_inicio', key: 'hora_inicio' },
+    { title: 'Data', dataIndex: 'data_inicio', key: 'data_inicio' },
+    { title: 'Sala', dataIndex: 'id_sala', key: 'id_sala' },
+    { title: 'Turno', dataIndex: 'turno', key: 'turno' }
   ];
 
-  const filledScheduleData = scheduleTimes.map(time => {
-    const existing = scheduleData.find(item => item.time === time);
-    return existing || { time, mon: '', tue: '', wed: '', thu: '', fri: '' };
-  });
+  // Verificação se todos os filtros foram selecionados
+  const allFiltersSelected = selectedDepartment && selectedBuilding && selectedRoom && selectedTurn && selectedMonth && selectedYear && selectedWeek;
 
   return (
     <div className="container">
-      <div className="filters-wrapper"> {/* Filtros separados */}
+      <div className="filters-wrapper">
         <div className="filters">
           <label className="filter-label">
             Departamento:
@@ -172,36 +150,64 @@ const Calendario = () => {
               ))}
             </select>
           </label>
+          <label className="filter-label">
+            Mês:
+            <input 
+              type="number" 
+              min="1" 
+              max="12" 
+              onChange={e => setSelectedMonth(e.target.value)} 
+              value={selectedMonth} 
+            />
+          </label>
+          <label className="filter-label">
+            Ano:
+            <input 
+              type="number" 
+              onChange={e => setSelectedYear(e.target.value)} 
+              value={selectedYear} 
+            />
+          </label>
+          <label className="filter-label">
+            Semana:
+            <input 
+              type="number" 
+              min="1" 
+              max="53" 
+              onChange={e => setSelectedWeek(e.target.value)} 
+              value={selectedWeek} 
+            />
+          </label>
         </div>
       </div>
+
       <div className="table-wrapper">
-        <table className="table agenda-shadow">
-          <thead>
-            <tr>
-              {columns.map(col => (
-                <th 
-                  key={col.key} 
-                >
-                  {col.title}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {filledScheduleData.map((row, rowIndex) => (
-              <tr key={rowIndex}>
+        {allFiltersSelected ? (
+          <table className="table agenda-shadow">
+            <thead>
+              <tr>
                 {columns.map(col => (
-                  <td 
-                    key={col.key} 
-                    className={col.key === 'time' ? 'time-cell' : ''}
-                  >
-                    {row[col.dataIndex]}
-                  </td>
+                  <th key={col.key}>
+                    {col.title}
+                  </th>
                 ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filteredData.map((row, rowIndex) => (
+                <tr key={rowIndex}>
+                  {columns.map(col => (
+                    <td key={col.key} className={col.key === 'hora_inicio' ? 'time-cell' : ''}>
+                      {row[col.dataIndex]}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p>Por favor, selecione todos os filtros para visualizar os agendamentos.</p>
+        )}
       </div>
     </div>
   );

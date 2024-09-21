@@ -17,8 +17,6 @@ import Configuracoes from './pages/configuracoes/Configuracoes';
 import SolicitacoesUser from './pages/solicitacoesUser/SolicitacoesUser';
 import SolicitacoesAdm from './pages/solicitacoesAdm/SolicitacoesAdm';
 
-
-
 function App() {
   const location = useLocation();
   
@@ -44,25 +42,22 @@ function App() {
       <Routes>
         <Route path='/' element={<Site />} />
         <Route path='login' element={<Login />} />
-        <Route path='cadastroSala' element={<CadastroSala />} />
-        <Route path='cadastroPredio' element={<CadastroPredio />} />
-        <Route path='cadastroDepartamento' element={<CadastroDepartamento />} />
-        <Route path='menuCadastro' element={<MenuCadastro/>} />
-        <Route path='registro' element={<Registro/>} />
-        <Route path='alocar' element={<Alocar/>} />
-        <Route path='calendario' element={<Calendario/>} />
-        <Route path='configuracoes' element={<Configuracoes/>} />
-        <Route path='solicitacoesUser' element={<SolicitacoesUser/>} />
-        <Route path='solicitacoesAdm' element={<SolicitacoesAdm/>} />
-        
-       
-        
-
+        <Route path='Cadastro' element={<Registro />} />
+      
         {isLoggedIn && (
           <>
+            <Route path='Calendario' element={<Calendario />} />
+            <Route path='Alocar' element={<Alocar />} />
+            <Route path='ConfigUsers' element={<Configuracoes />} />
+            <Route path = 'SolicitacoesUser' element={<SolicitacoesUser/>} />
+            
             {isAdmin && (
               <>
-
+                <Route path='CadastroPred' element={<CadastroPredio />} />
+                <Route path='CadastroSala' element={<CadastroSala />} />
+                <Route path='CadastroDep' element={<CadastroDepartamento />} />
+                <Route path='SolicitacoesAdm' element={<SolicitacoesAdm />} />
+                <Route path='MenuCadastro' element={<MenuCadastro />} />
               </>
             )}
           </>

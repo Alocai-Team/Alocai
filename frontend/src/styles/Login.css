@@ -72,10 +72,11 @@ input{
     transform: translateY(-50%);
 }
 .btn-containerLogin{
+    
     margin-top: 1rem;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
 }
 .btn{
     width: 20%;
@@ -97,7 +98,8 @@ input{
     color: #008DD8;
     border: 2px solid #008DD8;
 }
-.btn-container p{
-    margin-left: 0.5rem;
+.btn-container > p{
+    margin-left: 0,5rem;
     cursor: pointer;
+
 }
