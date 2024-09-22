@@ -148,6 +148,8 @@ export default function CadastroPredio() {
         </form>
         <button onClick={handleSubmit} name='sub' className='button'>Salvar</button>
       </div>
+      <h2 style={{color:'#003366',fontWeight:'bold',position:'relative', top:'1.5rem'}}>alocai</h2>
+
     </div>
   );
 }
