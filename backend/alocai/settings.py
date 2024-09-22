@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'departamentos',
     'predios',
     'salas',
+    'solicitacoes',
 ]
 
 MIDDLEWARE = [
