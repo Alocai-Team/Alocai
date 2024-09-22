@@ -30,9 +30,9 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 CORS_ALLOWED_ORIGINS = [
-    "http://127.0.0.1:5173",
-    "http://localhost:5173",
+    "http://localhost:3000",
 ]
+CORS_ALLOW_CREDENTIALS = True
 
 # Application definition
 
@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'predios',
     'salas',
     'solicitacoes',
+    'users1',
 ]
 
 MIDDLEWARE = [
@@ -145,7 +146,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = 'users1.User'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -153,15 +154,31 @@ REST_FRAMEWORK = {
     ),
 }
 
+"""
 SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": (
         "Bearer",
         "JWT"),
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=120),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=60),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'ALGORITHM': 'HS256',
     "SIGNING_KEY": "Elx62Zc41RQxbVDxb16Sid6wjUPn4iJr",
     "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
     "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
+}
+"""
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': "Elx62Zc41RQxbVDxb16Sid6wjUPn4iJr",  # Use sua chave secreta
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
 }
 
 DJOSER = {

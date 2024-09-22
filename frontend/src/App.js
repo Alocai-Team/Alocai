@@ -22,9 +22,8 @@ function App() {
   
   // Lógica para decidir qual NavBar mostrar
   const showNavBar = location.pathname === '/' || location.pathname === '/login' || location.pathname === '/Cadastro';
-  const isLoggedIn = true;  // Simula que o usuário está logado
-  const isAdmin = true;     // Simula que o usuário é admin
-
+  const isLoggedIn = !!localStorage.getItem('accessToken'); // Verifique se o token de acesso está presente
+  const isAdmin = localStorage.getItem('isAdmin') === 'true'; // Converta para booleano
   // Função que retorna a NavBar correta
   const getNavBar = () => {
     if (showNavBar) {

@@ -28,3 +28,14 @@ class User(AbstractBaseUser, PermissionsMixin):
     def get_full_name(self):
         return f"{self.name}"
     
+    groups = models.ManyToManyField(
+        'auth.Group',
+        related_name='users_user_groups',  # Nome exclusivo
+        blank=True,
+    )
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        related_name='users_user_permissions',  # Nome exclusivo
+        blank=True,
+    )
+    
