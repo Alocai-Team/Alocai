@@ -6,30 +6,27 @@ export default function Alocar() {
   const [universidade, setUniversidade] = useState('');
   const [predios, setPredios] = useState([]);
   const [departamentos, setDepartamentos] = useState([]);
-  const [filteredDepartamentos, setFilteredDepartamentos] = useState([]);
   const [salas, setSalas] = useState([]);
   const [selectedPredio, setSelectedPredio] = useState('');
   const [selectedDepartamento, setSelectedDepartamento] = useState('');
-  const [filteredSalas, setFilteredSalas] = useState([]);
-  const [isLoading, setIsLoading] = useState({ predios: true, salas: true, departamentos: true });
+  const [selectedSala, setSelectedSala] = useState('');
+  const [selectedTurno, setSelectedTurno] = useState('');
   const [dataInicio, setDataInicio] = useState('');
   const [dataFim, setDataFim] = useState('');
   const [horaInicio, setHoraInicio] = useState('');
   const [horaFim, setHoraFim] = useState('');
+  const [isLoading, setIsLoading] = useState({ predios: true, salas: true, departamentos: true });
+  const [filteredDepartamentos, setFilteredDepartamentos] = useState([]);
   const [filteredPredios, setFilteredPredios] = useState([]);
+  const [filteredSalas, setFilteredSalas] = useState([]);
 
-
-  // Função para carregar os dados do backend
+  // Carrega prédios e salas
   useEffect(() => {
     const fetchData = async () => {
       try {
         const predioResponse = await fetch('http://localhost:8000/api/predios/');
         const departamentoResponse = await fetch('http://localhost:8000/api/departamentos/');
         const salaResponse = await fetch('http://localhost:8000/api/salas/');
-
-        if (!predioResponse.ok || !departamentoResponse.ok || !salaResponse.ok) {
-          throw new Error('Erro ao carregar dados');
-        }
 
         const predioData = await predioResponse.json();
         const departamentoData = await departamentoResponse.json();
@@ -48,21 +45,17 @@ export default function Alocar() {
     fetchData();
   }, []);
 
-  // Filtragem dos departamentos pela universidade selecionada
+  // Filtra departamento com base na universidade
   useEffect(() => {
     if (universidade) {
-      const departamentosFiltrados = departamentos.filter(departamento => 
-        departamento.universidade === universidade
-      );
-      console.log('Departamentos filtrados:', departamentosFiltrados); // Verificação do filtro
-      setFilteredDepartamentos(departamentosFiltrados);
+      const filtrados = departamentos.filter(departamento => departamento.universidade === universidade);
+      setFilteredDepartamentos(filtrados);
     } else {
-      setFilteredDepartamentos([]); 
+      setFilteredDepartamentos([]);
     }
   }, [universidade, departamentos]);
 
-  //FILTRAGEM DE PREDIOS POR DEPARTAMENTO 
-
+  // Filtra prédio com base nos departamentos
   useEffect(() => {
     if (selectedDepartamento) {
       setIsLoading(prev => ({ ...prev, predios: true }));
@@ -76,49 +69,80 @@ export default function Alocar() {
           console.error('Erro ao carregar prédios:', error);
           setIsLoading(prev => ({ ...prev, predios: false }));
         });
+    } else {
+      setFilteredPredios([]);
     }
   }, [selectedDepartamento]);
 
-  // Filtragem das salas pelo prédio selecionado
+  // Filtra salas com base nos prédios
   useEffect(() => {
     if (selectedPredio) {
-      const salasFiltradas = salas.filter(sala => String(sala.id_predio) === String(selectedPredio));
-      console.log('Salas filtradas:', salasFiltradas); // Verificação do filtro
-      setFilteredSalas(salasFiltradas);
+      setIsLoading(prev => ({ ...prev, salas: true }));
+      fetch(`http://localhost:8000/api/salas/?predio=${selectedPredio}`)
+        .then(response => response.json())
+        .then(data => {
+          setFilteredSalas(data);
+          setIsLoading(prev => ({ ...prev, salas: false }));
+        })
+        .catch(error => {
+          console.error('Erro ao carregar salas:', error);
+          setIsLoading(prev => ({ ...prev, salas: false }));
+        });
     } else {
       setFilteredSalas([]);
     }
-  }, [selectedPredio, salas]);
+  }, [selectedPredio]);
 
+  // Envia o agendamento
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const agendamento = {
-      universidade,
-      departamento: selectedDepartamento,
-      predio: selectedPredio,
-      sala: e.target.sala.value,
-      turno: e.target.turno.value,
-      data_inicio: `${dataInicio}T${horaInicio}`,
-      data_fim: `${dataFim}T${horaFim}`
-    };
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('Você precisa estar logado.');
+      return;
+    }
 
     try {
-      const response = await fetch('http://localhost:8000/api/agendamentos/', {
+      // Decodifica o token JWT para obter o user_id
+      const decodedToken = JSON.parse(atob(token.split('.')[1]));
+      const usuarioId = decodedToken.user_id;
+
+      if (!selectedDepartamento || !selectedPredio || !selectedSala || !selectedTurno || !dataInicio || !dataFim || !horaInicio || !horaFim) {
+        alert('Por favor, preencha todos os campos obrigatórios.');
+        return;
+      }
+
+      const agendamento = {
+        universidade,
+        departamento: selectedDepartamento,
+        predio: selectedPredio,
+        sala: selectedSala,
+        turno: selectedTurno,
+        datahora_inicio: `${dataInicio}T${horaInicio}`,
+        datahora_fim: `${dataFim}T${horaFim}`,
+        status: 'em análise', // Status inicial
+        usuario_id: usuarioId, // Obtém o ID do usuário do token JWT
+      };
+
+      const response = await fetch('http://localhost:8000/api/solicitacoes/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(agendamento),
       });
 
       if (!response.ok) {
-        throw new Error('Erro ao agendar');
+        throw new Error('Erro ao enviar agendamento.');
       }
 
-      console.log('Agendamento criado com sucesso!');
+      const data = await response.json();
+      console.log('Agendamento criado com sucesso:', data);
+      // Aqui você pode adicionar uma mensagem de sucesso ou redirecionar o usuário
     } catch (error) {
-      console.error('Erro ao criar agendamento:', error);
+      console.error('Erro ao enviar agendamento:', error);
     }
   };
 
@@ -127,11 +151,9 @@ export default function Alocar() {
       <div className="pageTitleForm">
         <img src={Star} alt="" />
       </div>
-
       <div className="containerForm">
         <h2 style={{ color: '#003366', fontWeight: 'bold' }}>Qual sala você deseja alocar?</h2>
         <form className="formAlocar" onSubmit={handleSubmit}>
-          {/* Seletor de universidade */}
           <label htmlFor="universidade">Universidade
             <select id="universidade" value={universidade} onChange={(e) => setUniversidade(e.target.value)}>
               <option value="">Selecione...</option>
@@ -139,26 +161,26 @@ export default function Alocar() {
               <option value="ufpe">UFPE</option>
             </select>
           </label>
-
-          {/* Seletor de departamento */}
           <label htmlFor="departamento">Departamento
-            <select id="departamento" value={selectedDepartamento} onChange={(e) => setSelectedDepartamento(e.target.value)}>
-              <option value="">Selecione...</option>
+            <select id="departamento" value={selectedDepartamento} onChange={e => setSelectedDepartamento(e.target.value)}>
+              <option value="">Selecione o Departamento...</option>
               {!isLoading.departamentos ? (
-                filteredDepartamentos.map(departamento => (
-                  <option key={departamento.id} value={departamento.id}>
-                    {departamento.nome}
-                  </option>
-                ))
+                filteredDepartamentos.length > 0 ? (
+                  filteredDepartamentos.map(departamento => (
+                    <option key={departamento.id} value={departamento.id}>
+                      {departamento.nome}
+                    </option>
+                  ))
+                ) : (
+                  <option value="">Nenhum departamento encontrado</option>
+                )
               ) : (
                 <option>Carregando departamentos...</option>
               )}
             </select>
           </label>
-
-          {/* Seletor de prédio */}
           <label htmlFor="predio">Prédio
-          <select id="predio" value={selectedPredio} onChange={e => setSelectedPredio(e.target.value)}>
+            <select id="predio" value={selectedPredio} onChange={e => setSelectedPredio(e.target.value)}>
               <option value="">Selecione...</option>
               {!isLoading.predios ? (
                 filteredPredios.map(predio => (
@@ -171,54 +193,49 @@ export default function Alocar() {
               )}
             </select>
           </label>
-
-          {/* Seletor de sala */}
           <label htmlFor="sala">Sala
-            <select id="sala">
-              <option value="">Selecione...</option>
+            <select id="sala" value={selectedSala} onChange={(e) => setSelectedSala(e.target.value)} disabled={!selectedPredio || isLoading.salas}>
+              <option value="">Selecione a Sala...</option>
               {!isLoading.salas ? (
-                filteredSalas.map(sala => (
-                  <option key={sala.id} value={sala.id}>
-                    {sala.numero}
-                  </option>
-                ))
+                filteredSalas.length > 0 ? (
+                  filteredSalas.map(sala => (
+                    <option key={sala.id} value={sala.id}>
+                      {sala.numero}
+                    </option>
+                  ))
+                ) : (
+                  <option value="">Nenhuma sala encontrada</option>
+                )
               ) : (
                 <option>Carregando salas...</option>
               )}
             </select>
           </label>
-
-          {/* Seletor de turno */}
           <label htmlFor="turno">Turno
-            <select id="turno">
+            <select id="turno" value={selectedTurno} onChange={e => setSelectedTurno(e.target.value)}>
               <option value="">Selecione...</option>
               <option value="manha">Manhã</option>
               <option value="tarde">Tarde</option>
               <option value="noite">Noite</option>
             </select>
           </label>
-
-          {/* Campos de data e hora */}
           <label htmlFor="dataInicio">Data de Início
             <input type="date" id="dataInicio" value={dataInicio} onChange={(e) => setDataInicio(e.target.value)} />
           </label>
-
           <label htmlFor="horaInicio">Hora de Início
             <input type="time" id="horaInicio" value={horaInicio} onChange={(e) => setHoraInicio(e.target.value)} />
           </label>
-
-          <label htmlFor="dataFim">Data de Término
+          <label htmlFor="dataFim">Data de Fim
             <input type="date" id="dataFim" value={dataFim} onChange={(e) => setDataFim(e.target.value)} />
           </label>
-
-          <label htmlFor="horaFim">Hora de Término
+          <label htmlFor="horaFim">Hora de Fim
             <input type="time" id="horaFim" value={horaFim} onChange={(e) => setHoraFim(e.target.value)} />
           </label>
-
         </form>
-        <button onClick={handleSubmit} className="button">Alocar!</button>
+        <button onClick={handleSubmit} >Enviar</button>
       </div>
       <h2 style={{color:'#003366',fontWeight:'bold',position:'relative', top:'1.5rem'}}>alocai</h2>
+
     </div>
   );
 }

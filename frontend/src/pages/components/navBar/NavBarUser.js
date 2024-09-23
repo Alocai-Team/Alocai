@@ -21,9 +21,7 @@ export default function NavBarUser() {
   
   const handleLogout = () => {
     // Remove o token do localStorage
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('isAdmin');
+    localStorage.clear()
     
     // Redireciona para a página de login
     navigate('/login');
@@ -38,7 +36,6 @@ export default function NavBarUser() {
               <Link to='/Alocar' className='linkLogado'><PiBookmarkBold className='iconNavBarLogado'/> Alocar</Link>
               <Link to='/SolicitacoesUser' className='linkLogado'><HiOutlineClipboardDocumentCheck className='iconNavBarLogado'/> Solicitações</Link>
               <Link to='/ConfigUsers' className='linkLogado'> <FaGear className='iconNavBarLogado'/> Configurações</Link>
-              <Link to='#' onClick={handleBack} className='linkLogado'><RiArrowGoBackFill className='iconNavBarLogado'/> Voltar</Link>
               <Link to='/' onClick={handleLogout} className='linkLogado'><MdExitToApp className='iconNavBarLogado'/> Sair</Link>
           </ul>
           <div></div>

@@ -18,9 +18,7 @@ export default function NavBarAdm() {
 
   const handleLogout = () => {
     // Remove o token do localStorage
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('isAdmin');
+   localStorage.clear()
     
     // Redireciona para a página de login
     navigate('/login');
@@ -34,8 +32,7 @@ export default function NavBarAdm() {
                 <Link to='/Calendario' className='linkLogado'> <TiHomeOutline className='iconNavBarLogado'/> Home</Link>
                 <Link to='/Alocar' className='linkLogado'><PiBookmarkBold className='iconNavBarLogado'/> Alocar</Link>
                 <Link to='/SolicitacoesAdm' className='linkLogado'><HiOutlineClipboardDocumentCheck className='iconNavBarLogado'/> Solicitações</Link>
-                <Link to='/MenuCadastro' className='linkLogado'> <GrConfigure className='iconNavBarLogado'/> Configurações</Link>
-                <Link to='#' onClick={handleBack} className='linkLogado'><RiArrowGoBackFill className='iconNavBarLogado'/> Voltar</Link>
+                <Link to='/MenuCadastro' className='linkLogado'> <GrConfigure className='iconNavBarLogado'/> Cadastros</Link>
                 <Link to='/' onClick={handleLogout} className='linkLogado'><MdExitToApp className='iconNavBarLogado'/> Sair</Link>
             </ul>
             <div></div>
