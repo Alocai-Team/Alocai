@@ -33,7 +33,7 @@ export default function Registro() {
         }
 
         try {
-            const response = await fetch('http://localhost:8000/api/v1/auth/users/', {
+            const response = await fetch('http://localhost:8000/api/users1/register/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -47,8 +47,6 @@ export default function Registro() {
             });
 
             if (!response.ok) {
-                const errorData = await response.json();
-                console.log(errorData)
                 throw new Error('Erro ao cadastrar usuário');
             }
 

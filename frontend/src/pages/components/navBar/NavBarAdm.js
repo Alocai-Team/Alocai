@@ -16,6 +16,16 @@ export default function NavBarAdm() {
     navigate(-1); // -1 faz voltar à página anterior
   };
 
+  const handleLogout = () => {
+    // Remove o token do localStorage
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('isAdmin');
+    
+    // Redireciona para a página de login
+    navigate('/login');
+  };
+
   return (
     <div className='headerContainer'>
         <nav className='header'>
@@ -26,7 +36,7 @@ export default function NavBarAdm() {
                 <Link to='/SolicitacoesAdm' className='linkLogado'><HiOutlineClipboardDocumentCheck className='iconNavBarLogado'/> Solicitações</Link>
                 <Link to='/MenuCadastro' className='linkLogado'> <GrConfigure className='iconNavBarLogado'/> Configurações</Link>
                 <Link to='#' onClick={handleBack} className='linkLogado'><RiArrowGoBackFill className='iconNavBarLogado'/> Voltar</Link>
-                <Link to='/' className='linkLogado'><MdExitToApp className='iconNavBarLogado'/> Sair</Link>
+                <Link to='/' onClick={handleLogout} className='linkLogado'><MdExitToApp className='iconNavBarLogado'/> Sair</Link>
             </ul>
             <div></div>
 
