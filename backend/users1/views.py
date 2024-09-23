@@ -14,17 +14,17 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def get_token(cls, user):
         token = super().get_token(user)
 
-        # Adicione o campo is_staff ao token
+        # Adiciona o campo is_staff ao token
         token['is_staff'] = user.is_staff
-
+        token['user_id'] = user.id
         return token
 
     def validate(self, attrs):
         data = super().validate(attrs)
 
-        # Adicione o is_staff ao response data
+        # Adiciona o is_staff ao response data
         data['is_staff'] = self.user.is_staff
-
+        data['user_id'] = self.user.id
         return data
 
 class CustomTokenObtainPairView(TokenObtainPairView):

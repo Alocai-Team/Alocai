@@ -2,7 +2,7 @@ from django.db import models
 from departamentos.models import Departamento
 from predios.models import Predio
 from salas.models import Sala
-from users.models import User
+from users1.models import User
 
 TURNO_CHOICES = (
     ('manha', 'Manhã'),

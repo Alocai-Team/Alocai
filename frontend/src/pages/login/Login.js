@@ -51,7 +51,7 @@ export default function Login() {
             localStorage.setItem('accessToken', data.access);
             localStorage.setItem('refreshToken', data.refresh);
             localStorage.setItem('isAdmin', data.is_staff); // Salve o valor de is_staff
-            localStorage.setItem('token',data.id)
+            localStorage.setItem('userId', data.user_id);
 
 
             alert("Login realizado com sucesso!");

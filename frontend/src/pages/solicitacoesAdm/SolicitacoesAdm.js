@@ -91,7 +91,7 @@ export default function SolicitacoesAdm() {
             <thead>
               <tr>
                 <th>Status</th>
-                <th>ID da Solicitação</th>
+                <th>ID do Usuário</th>
                 <th>Data de Início</th>
                 <th>Data de Término</th>
                 <th>Número da Sala</th>
@@ -105,7 +105,7 @@ export default function SolicitacoesAdm() {
                 solicitacoes.map(solicitacao => (
                   <tr key={solicitacao.id}>
                     <td>{solicitacao.status}</td>
-                    <td>{solicitacao.id}</td>
+                    <td>{solicitacao.id_usuario}</td>
                     <td>{new Date(solicitacao.datahora_inicio).toLocaleDateString()}</td>
                     <td>{new Date(solicitacao.datahora_fim).toLocaleDateString()}</td>
                     <td>{getSalaNumero(solicitacao.sala)}</td> {/* Número da Sala */}

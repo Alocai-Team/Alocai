@@ -3,7 +3,7 @@ import Star from '../../assets/star.png';
 import '../../styles/Alocar.css';
 
 export default function Alocar() {
-  const [universidade, setUniversidade] = useState('');
+  const [selectedUniversidade, setUniversidade] = useState('');
   const [predios, setPredios] = useState([]);
   const [departamentos, setDepartamentos] = useState([]);
   const [salas, setSalas] = useState([]);
@@ -47,13 +47,13 @@ export default function Alocar() {
 
   // Filtra departamento com base na universidade
   useEffect(() => {
-    if (universidade) {
-      const filtrados = departamentos.filter(departamento => departamento.universidade === universidade);
+    if (selectedUniversidade) {
+      const filtrados = departamentos.filter(departamento => departamento.universidade === selectedUniversidade);
       setFilteredDepartamentos(filtrados);
     } else {
       setFilteredDepartamentos([]);
     }
-  }, [universidade, departamentos]);
+  }, [selectedUniversidade, departamentos]);
 
   // Filtra prédio com base nos departamentos
   useEffect(() => {
@@ -98,38 +98,39 @@ export default function Alocar() {
     e.preventDefault();
 
     const token = localStorage.getItem('token');
-    if (!token) {
+    /*if (!token) {
       alert('Você precisa estar logado.');
       return;
-    }
+    }*/
 
     try {
       // Decodifica o token JWT para obter o user_id
-      const decodedToken = JSON.parse(atob(token.split('.')[1]));
-      const usuarioId = decodedToken.user_id;
+      //const decodedToken = JSON.parse(atob(token.split('.')[1]));
+      //const usuarioId = decodedToken.user_id;
 
       if (!selectedDepartamento || !selectedPredio || !selectedSala || !selectedTurno || !dataInicio || !dataFim || !horaInicio || !horaFim) {
         alert('Por favor, preencha todos os campos obrigatórios.');
         return;
       }
-
+      const access_token = localStorage.getItem('access_token'); // Assumindo que o token está armazenado no localStorage
+      const id_atual = localStorage.getItem('userId');
       const agendamento = {
-        universidade,
-        departamento: selectedDepartamento,
-        predio: selectedPredio,
-        sala: selectedSala,
+        id_usuario: id_atual,
+        universidade:selectedUniversidade.id,
+        departamento: selectedDepartamento.id,
+        predio: selectedPredio.id,
+        sala: selectedSala.id,
         turno: selectedTurno,
         datahora_inicio: `${dataInicio}T${horaInicio}`,
         datahora_fim: `${dataFim}T${horaFim}`,
-        status: 'em análise', // Status inicial
-        usuario_id: usuarioId, // Obtém o ID do usuário do token JWT
+        status: 'Em análise', // Status inicial
       };
 
       const response = await fetch('http://localhost:8000/api/solicitacoes/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          'Authorization': `Bearer ${access_token}`,
         },
         body: JSON.stringify(agendamento),
       });
@@ -155,7 +156,7 @@ export default function Alocar() {
         <h2 style={{ color: '#003366', fontWeight: 'bold' }}>Qual sala você deseja alocar?</h2>
         <form className="formAlocar" onSubmit={handleSubmit}>
           <label htmlFor="universidade">Universidade
-            <select id="universidade" value={universidade} onChange={(e) => setUniversidade(e.target.value)}>
+            <select id="universidade" value={selectedUniversidade} onChange={(e) => setUniversidade(e.target.value)}>
               <option value="">Selecione...</option>
               <option value="ufrpe">UFRPE</option>
               <option value="ufpe">UFPE</option>
